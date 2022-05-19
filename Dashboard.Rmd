@@ -1,0 +1,387 @@
+---
+title: "EcoStats"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: rows
+    vertical_layout: scroll
+    social: menu
+    source_code: embed
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+source("SurveyDataCleaning.R")
+```
+
+Demographics {data-icon="fa-clipboard-list"}
+=============================
+Inputs {.sidebar data-width=350}
+-----------------------------------------------------------------------
+### Basic info
+Here are the data collected for the BSU natural sciences graduate programs quantitative needs assessment 2022. Data are broken down into 7 categories:
+
+* **1 Demographic information: Basic** information showing the position and program makeup of the respondents.
+* **2 Student specific information:** Responses that students gave about themselves.
+* **3 Faculty specific information:** Responses that faculty gave about their students.
+* **4 Concepts:** Key concepts and estimated quantities that both faculty and students believe are foundational to graduate education in the natural sciences at Boise State
+* **5 Community:** Information related to which 'community-style' resources respondents regularly use or don't.
+* **6 Comments:** Long-answer responses from the survey regarding things that are currently working well and also things that could be improved.
+* **7 Extra info:** Some supplemental information.
+
+### How to use this dashboard
+Notice that this dashboard is interactive in both the layout and the figures. Each tab has several sub-tabs to explore. Many figures will also provide you with more detailed information when you hover your cursor over a certain section of interest. Many figures also have functionality to download them as a png and zoom in on areas of your choice. 
+
+<br>
+
+In each tab you will find figures that visually explain the data. Accompanying these will be text in this left side-bar. This text will list key takeaways from each section. 
+
+
+Row{data-height=300}
+-----------------------------------------------------------------------
+
+### valuebox
+```{r}
+valueBox(value = nrow(df),icon = "fa-reply-all",caption = "Total responses", color = "#2171b5")
+```
+
+### Position of respondents
+```{r}
+FacVsStud
+```
+
+
+
+Row{data-height=500}
+--------
+
+### Proportion of student responses by program
+```{r fig.width=15,fig.height=5, echo=FALSE}
+plotly::ggplotly(degreeplotStu)
+```
+
+
+Row{data-height=500}
+--------
+
+### Proportion of faculty responses by program
+```{r fig.width=15,fig.height=5, echo=FALSE}
+plotly::ggplotly(degreeplotfac)
+```
+
+Students specific {data-icon="fa-graduation-cap"} 
+=============================
+Inputs {.sidebar data-width=350}
+-----------------------------------------------------------------------
+### Students responses
+These are the responses where students indicated things specifically about themselves. These are distinct from the data displayed in the other tabs where student and faculty data are combined to show overall opinions about key concepts and community resources available for students and faculty. 
+
+
+### Key takaways
+
+* **No student said that they believed quantitative skills would be less than "moderately important" for any career category.** Other options were available and included: "slightly important" and "not at all important."
+
+* **The majority of student respondents do not plan to stay in academia.** Only 26% of students indicated that they plan to stay in academia either in a teaching or research capacity. Nearly half (42%) of students indicated that they plan to enter the private sector. 
+
+* **Twenty eight percent of students indicated wanting to work for the government. These students showed relatively less emphasis on the importance of quantitative skills.** 
+
+* **Students indicated that they believe data management and linear regression were the most important quantitative skills for them to learn.** Of students who chose these options, about half feel that they need more training than they currently have to be ready to enter the job market. 
+* **Students indicated that they believe R and Python are the most important programming languages to learn in order to be competitive on the job market.** Students who believe that will need R skills are more likely (28%) to indicate that they are prepared to enter the job market compared to students who believe they need skills in Python (12%). 
+
+
+
+row{}
+-------------------------------------------------------------------------------
+### Masters students 
+```{r}
+valueBox(value = nrow(dplyr::filter(df,Position=="Masters student")),icon = "fa-frog",caption = "Masters students", color = "#5ab4ac")
+```
+
+### Phd students
+```{r}
+valueBox(value = nrow(dplyr::filter(df,Position=="PhD student")),icon = "fa-skull",caption = "PhD students", color = "#01665e")
+```
+
+row{}
+-------------------------------------------------------------------------------
+### Cohort 
+```{r,fig.width=15,fig.height=3.5, echo=FALSE}
+COHORT
+```
+
+row {.tabset .tabset-fade}
+-----------------
+### Career Goals
+```{r, fig.width=12,fig.height=7, echo=FALSE}
+
+StuGoals
+
+```
+
+### Quant skills importance
+
+
+
+```{r, fig.width=12,fig.height=7, echo=FALSE}
+QUANTIMPforCAREER
+
+```
+
+
+
+### Quant skills needed vs current level
+```{r, fig.width=12,fig.height=7, echo=FALSE}
+plotly::ggplotly( SKILL4Career)
+
+```
+
+### Programming languages used vs skill
+```{r, fig.width=12,fig.height=7, echo=FALSE}
+
+plotly::ggplotly(CODE4Career)
+```
+
+row{}
+-------------------------------------------------------------------------------
+### Another view 
+```{r,fig.width=12,fig.height=7, echo=FALSE}
+QUANTIMPforCAREER2
+```
+
+Faculty specific {data-icon="fa-apple"}
+=============================
+Inputs {.sidebar data-width=350}
+-----------------------------------------------------------------------
+### Faculty responses
+These are the responses where faculty indicated things specifically about their students These are distinct from the data displayed in the other tabs where student and faculty data are combined to show overall opinions about key concepts and community resources available for students and faculty. 
+
+
+### Key takaways
+
+* **No faculty member said that they believed quantitative skills would be less than "moderately important" for any career category.** Other options were available and included: "slightly important" and "not at all important."
+
+* **Faculty indicate that their students plan to stay in academic research at a higher rate than students indicate about themselves.** Additionally, faculty were less likely to indicate that they believe that quantitative skills are "moderately important" for their students' career prospects. Instead they indicated "very important" at a higher rate. 
+
+* **Faculty indicated that they believe data management and linear regression were the most important quantitative skills for students to learn.** Of faculty who chose these options, about half feel that their students need more training than they currently have to be ready to enter the job market. Faculty were much more likely to indicate Structural Equation Modeling as an important job skill than students. 
+
+* **Faculty indicated that they believe R is the important programming language to learn in order to be competitive on the job market.** Faculty overwhelmingly indicated that their students need more training in all programming languages in order to be competitive on the job market. Faculty places less emphasis on the importance of Python than did students. 
+
+
+row{}
+-------------------------------------------------------------------------------
+### URM added 
+```{r}
+valueBox(value = nrow(dplyr::filter(df,Position=="Faculty member")),icon = "fa-apple",caption = "Faculty member responses", color = "#5ab4ac")
+```
+
+
+row {.tabset .tabset-fade}
+-----------------
+
+### Quant skills importance
+```{r, fig.width=12,fig.height=7, echo=FALSE}
+QUANTIMPforCAREER_FAC
+```
+
+### Quant skills needed vs current level
+```{r, fig.width=12,fig.height=7, echo=FALSE}
+
+plotly::ggplotly(SKILL4Career_FAC)
+```
+
+### Programming languages used vs skill
+```{r, fig.width=12,fig.height=7, echo=FALSE}
+
+plotly::ggplotly(CODE4Career_FAC)
+```
+
+row{}
+-------------------------------------------------------------------------------
+### Another view 
+```{r,fig.width=12,fig.height=7, echo=FALSE}
+QUANTIMPforCAREER_FAC2
+```
+
+Concepts {data-icon="fa-calculator"}
+=============================
+Inputs {.sidebar data-width=350}
+-----------------------------------------------------------------------
+### Concepts
+These data show the aggregated responses of both students and faculty regarding key concepts they believe graduate students in the natural sciences at BSU should learn as part of their graduate education. 
+
+
+### Key takeaways
+* **Experimental design and communication of scientific results were the highest ranked key concepts.** Alternatively, foundations of machine learning and foundations of complex systems science were the lowest ranked concepts.
+
+* **There is no overwhelming opinion on the most important quantities for students to learn to estimate.** Abundance and occurrence of species or events, spatial/temporal autocorrelation, and assessing the efficacy of treatments/interventions were the top three options, but none were selected by more than 25% of respondents. 
+
+* **Data on the most common problems respondents encounter matched responses regarding key skills.** Respondents indicated that managing large data, fitting regression analyses, and effective visualization were the most common issues they encounter.
+
+* **Nearly half (39%) of respondents said that they prefer to gain new computational and quantitative skills as part of assignments for existing classes.** This method is only really applicable to students. About a third of respondents (29%) indicated that they would attend a week-long bootcamp to learn a new computational or quantitative skill. This option will be more accessible to faculty. 
+
+* **R, Python, & Google Earth Engine are the top three software tools that respondents would likely attend a week-long bootcamp to learn.** Of these top three softwares, R was the most likely to be indicated and was selected by nearly a third (28%) of respondents.
+
+
+row{.tabset .tabset-fade}
+-------------------------------------------------------------------------------
+### Most important concepts 
+```{r, fig.width=12,fig.height=8, echo=FALSE}
+plotly::ggplotly(CONCEPTSPLT)
+
+```
+
+### Important quant to estimate
+```{r, fig.width=12,fig.height=8, echo=FALSE}
+
+IMP_QUANTS
+
+```
+
+row {.tabset .tabset-fade}
+-----------------
+### Computational problems
+```{r, fig.width=12,fig.height=8, echo=FALSE}
+COMP_PROBZ
+
+```
+
+
+
+### Pref to gain skills
+```{r, fig.width=12,fig.height=8, echo=FALSE}
+PREF_GAIN
+
+```
+
+### Languages for bootcamp
+```{r, fig.width=12,fig.height=8, echo=FALSE}
+plotly::ggplotly(BOOT_LANGS)
+
+```
+
+
+
+Community {data-icon="fa-user-plus"}
+=============================
+Inputs {.sidebar data-width=350}
+-----------------------------------------------------------------------
+### Community resources
+This tab contains information for both students and faculty on which community resources they use and why they use them while avoiding others. 
+
+
+### Key takeaways
+* **The EcoStats Slack channel and the R Users' Group are the most used community resources.** While these resources were the most selected, they were both still only indicated by about 30% of respondents. 
+
+* **Timing is the primary reason why respondents do not attend the R Users' Group.**
+
+* **Respondents are not aware of the new 1:1 R help sessions provided by the biology department.**
+
+* **Respondents are not aware of the Time Series and Remote Sensing group.**
+
+* **Respondents are not aware of the EcoStats Summer reading group.**
+
+* **Respondents are both not aware of and find it difficult to attend the Stats Hour.**
+
+* **Respondents are not aware of the EcoStats Slack channel.**
+
+
+row{}
+-------------------------------------------------------------------------------
+### Which do people use 
+```{r, fig.width=12,fig.height=3.5, echo=FALSE}
+RESOURCES_USED
+```
+
+row{.tabset .tabset-fade}
+-------------------------------------------------------------------------------
+### RUG
+```{r, fig.width=12,fig.height=8, echo=FALSE}
+plotly::ggplotly(REASONplt_rug)
+
+```
+
+### 1:1
+```{r, fig.width=12,fig.height=8, echo=FALSE}
+plotly::ggplotly(REASONplt_1_1)
+
+```
+### TSARS
+```{r, fig.width=12,fig.height=8, echo=FALSE}
+plotly::ggplotly(REASONplt_tsars)
+
+```
+### Summer Reading Group
+```{r, fig.width=12,fig.height=8, echo=FALSE}
+plotly::ggplotly(REASONplt_read)
+
+```
+### Stats hour
+```{r, fig.width=12,fig.height=8, echo=FALSE}
+plotly::ggplotly(REASONplt_sthr)
+
+```
+### Slack Channel
+```{r, fig.width=12,fig.height=8, echo=FALSE}
+plotly::ggplotly(REASONplt_slack)
+
+```
+
+
+
+Comments {data-icon="fa-comment"}
+=============================
+Inputs {.sidebar data-width=350}
+-----------------------------------------------------------------------
+### Open answer responses
+These are the full list of open answer responses. Under the "Good things" tab are the responses where respondents were asked what things in the natural sciences graduate programs at BSU are currently working well to support their (or their students) learning regarding computational or quantitative skills and concepts. 
+<br>
+Under the "Bad things" tab are the responses where respondents were asked how things can be improved to better support their (or their students) learning regarding computational or quantitative skills and concepts.
+
+
+row{.tabset .tabset-fade}
+-------------------------------------------------------------------------------
+### Goog things 
+```{r, fig.width=12,fig.height=15, echo=FALSE}
+z<-df%>%select(LngAnswrGood)%>%na.omit()
+for(i in 1:nrow(z)){
+  print(z[i,]$LngAnswrGood)
+}
+```
+
+### Bad things
+```{r, fig.width=12,fig.height=15, echo=FALSE}
+
+z<-df%>%select(LngAnswrBad)%>%na.omit()
+
+for(i in 1:nrow(z)){
+  print(z[i,]$LngAnswrBad)
+}
+
+```
+
+
+
+
+Further Info {data-icon="fa-info-circle"}
+=============================
+
+### Extra Bits
+The application is built with the [Shiny](http://shiny.rstudio.com) framework for the [R programming language](https://www.r-project.org/). The application layout is produced with the [flexdashboard](http://rstudio.github.io/flexdashboard/index.html) package, and the charts and use [Plotly](http://plot.ly), and [ggplot2](http://ggplot2.org/), all accessed through their corresponding R packages. Nearly all figures were produced using the reggaeton color palettes available using the [peRReo](https://github.com/jbgb13/peRReo) R package. Prominent themes include: daddy1, shakira, badbunny1, badbunny2, badgyal, and daddy2. 
+
+Code for the application is available through the tab in the upper right.  
+
+### Where does this data come from?
+This survey was conducted and presented as part of the new 'R consultant' TA position in the Biological Sciences in Spring 2022. This position also includes running the 1:1 R help sessions referenced in these results. If you would like access to the raw data used for this dashboard please reach out to the Biology Dept at Boise State. 
+
+### Questions?
+If you have any questions about the data presented here, please email Matt Clark at Matthewclark989@boisestate.edu. I welcome feedback and suggestions! You can even [connect with me on Twitter](https://twitter.com/MattCScience). 
+
+
+
+row
+-------
+```{r picture, echo = F, fig.align="center", out.width = '100%'}
+#knitr::include_graphics("BSUPic.png")
+```
+
+
+
