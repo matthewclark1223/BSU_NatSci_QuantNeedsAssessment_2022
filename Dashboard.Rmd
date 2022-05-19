@@ -10,7 +10,7 @@ output:
 
 ```{r setup, include=FALSE}
 library(flexdashboard)
-source("SurveyDataCleaning.R")
+source("SurveyFigures.R")
 ```
 
 Demographics {data-icon="fa-clipboard-list"}
